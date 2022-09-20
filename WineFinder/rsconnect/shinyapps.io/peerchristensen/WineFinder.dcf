@@ -1,0 +1,12 @@
+name: WineFinder
+title: WineFinder
+username:
+account: peerchristensen
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7063122
+bundleId: 6319817
+url: https://peerchristensen.shinyapps.io/WineFinder/
+when: 1663677751.41049
+asMultiple: FALSE
+asStatic: FALSE

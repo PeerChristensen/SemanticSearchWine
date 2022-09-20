@@ -1,0 +1,11 @@
+name: wine_rec
+dependencies:
+  - python=3.8
+  - pip
+  - pip:
+    - numpy
+    - scikit-learn
+    - pandas
+    - torch
+    - sentence_transformers
+    - rsconnect-python

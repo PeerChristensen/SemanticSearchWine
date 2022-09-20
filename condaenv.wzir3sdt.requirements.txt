@@ -1,0 +1,6 @@
+numpy
+scikit-learn
+pandas
+torch
+sentence_transformers
+rsconnect-python
