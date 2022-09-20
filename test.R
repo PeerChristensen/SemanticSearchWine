@@ -1,9 +1,9 @@
 library(tidyverse)
 library(reticulate)
 reticulate::use_condaenv("wine_env")
-reticulate::py_run_file("test.py")
+reticulate::py_run_file("WineFinder/python_function.py")
 
-df <- read_csv("wine_reviews.csv") %>%
+df <- read_csv("WineFinder/wine_reviews.csv") %>%
   mutate(id = row_number() - 1)
 
 model <- py$get_model()
@@ -14,7 +14,7 @@ query <- "Full-bodied with notes of red berries"
 
 query_embedding <- py$get_embedding(query, model)
 
-matches <- py$get_matches(embeddings, query_embedding, k = 5)
+matches <- py$get_matches(a, query_embedding, k = 5)
 
 df %>%
   inner_join(matches, by = c("id" = "index")) %>%
