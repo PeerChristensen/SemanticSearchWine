@@ -1,15 +1,12 @@
 
-install.packages("reticulate", "vroom", "shinythemes", "shinyWidgets")
+install.packages(c("tidyverse","shiny","reticulate", "vroom", "shinythemes", "shinyWidgets"),
+                 repos = "http://cran.us.r-project.org")
 
-reticulate::install_miniconda()
-?reticulate::conda_create()
-reticulate::conda_install(packages = "python=3.9")
-
-RUN R -q -e 'reticulate::conda_create(envname = "r-autogluon", packages = c("python=3.8.13", "numpy"))'
-# RUN R -q -e 'reticulate::conda_list()'
-RUN R -q -e 'reticulate::conda_install(envname = "r-autogluon", packages = "autogluon", pip = TRUE)'
-
-
-## Modify Rprofile
-RUN R -e 'write("reticulate::use_condaenv(\"r-autogluon\", required = TRUE)",file=file.path(R.home(),"etc","Rprofile.site"),append=TRUE)'
-RUN R -e 'write("reticulate::import(\"autogluon.tabular\")",file=file.path(R.home(),"etc","Rprofile.site"),append=TRUE)'
+# reticulate::install_miniconda()
+# 
+# reticulate::conda_create(envname = "docker_wine_rec")
+# reticulate::conda_install(envname = "docker_wine_rec",
+#                           packages = c("numpy", "pandas", "torch", "sentence-transformers"),
+#                           pip = TRUE)
+# reticulate::use_condaenv("docker_wine_rec")
+# reticulate::use_python('/root/.local/share/r-miniconda/envs/docker_wine_rec/bin/python')

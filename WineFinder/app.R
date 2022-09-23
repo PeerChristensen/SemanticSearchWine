@@ -1,12 +1,12 @@
 
-library(tidyverse)
+library(dplyr)
 library(reticulate)
 library(shiny)
 library(vroom)
 library(shinythemes)
 library(shinyWidgets)
 
-reticulate::use_condaenv("wine_env")
+reticulate::use_condaenv("wine_rec")
 reticulate::py_run_file("python_functions.py")
 
 model <- py$get_model()
@@ -21,24 +21,10 @@ countries <- df %>%
     arrange(country) %>%
     pull(country)
 
-# Define any Python packages needed for the app here:
-# PYTHON_DEPENDENCIES = c('pip', 'numpy', 'pandas', 'torch', 'sentence-transformers')
-# 
-# virtualenv_dir = Sys.getenv('VIRTUALENV_NAME')
-# python_path = Sys.getenv('PYTHON_PATH')
-#     
-# # Create virtual env and install dependencies
-# reticulate::virtualenv_create(envname = virtualenv_dir, python = python_path)
-# reticulate::virtualenv_install(virtualenv_dir, packages = PYTHON_DEPENDENCIES, ignore_installed=TRUE)
-# reticulate::use_virtualenv(virtualenv_dir, required = T)
 
-
-ui <- fluidPage(
+ui <- fluidPage(title="Wine Finder",
     theme = shinytheme("sandstone"),
     tags$head(tags$style(HTML(c("a {color: darkred}",
-                                #  "#go , #go:active{background-color:darkred;
-                                #   -webkit-box-shadow: 0px;
-                                #    box-shadow: 0px;}", # just for reference
                                 "h1 {
                                               font-family: 'Lobster',cursive, bold;
                                               font-weight: 600;
@@ -58,8 +44,6 @@ ui <- fluidPage(
                                               outline: 0;
                                               box-shadow: none;
                                             }"
-                                
-                                
     )))),
     titlePanel(h1("Wine Finder")),
     sidebarLayout(
@@ -69,7 +53,8 @@ ui <- fluidPage(
                       value = "",
                       width = "80%",
                       placeholder = "Describe what kind of wine you like.."),
-            actionButton("go", h2(strong(icon("glass-cheers"))),
+            actionButton("go", 
+                         h2(strong(icon("glass-cheers"))),
                          width="80px",
                          style='padding:1px;'),
             hr(),
@@ -91,6 +76,7 @@ ui <- fluidPage(
                             `live-search` = TRUE,
                             `live-search-placeholder` = "Search Countries"),
                         multiple = T),
+            setSliderColor(c("darkred ", "darkred"), c(1, 2)),
             sliderInput("points",
                         h4("Min points given"),
                         min = min(df$points),
@@ -118,13 +104,6 @@ server <- function(input, output) {
         req(input$query)
         query_embedding <- py$get_embedding(input$query, model)
         
-        # embeddings <- df %>%
-        #     filter(country %in% input$countries,
-        #            points >= input$points) %>%
-        #     select(starts_with("V")) %>%
-        #     select(-variety) %>%
-        #     as.matrix()
-        
         matches <- py$get_matches(embeddings, query_embedding, k = input$hits)
         
         df %>%
@@ -134,10 +113,11 @@ server <- function(input, output) {
                    points >= input$points) %>%
             select(score, everything()) %>%
             arrange(desc(score))
-    })
+    }, escape = FALSE) # for rendering urls
     }
-)
+  )
 }
+
 # Run the application 
 shinyApp(ui = ui, server = server)
 

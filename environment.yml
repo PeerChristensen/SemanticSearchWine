@@ -1,4 +1,7 @@
 name: wine_rec
+channels:
+  - conda-forge
+  - defaults
 dependencies:
   - python=3.8
   - pip
@@ -8,3 +11,6 @@ dependencies:
     - torch
     - sentence-transformers
     - rsconnect-python
+  - r-essentials
+  - r-devtools
+  - r-shiny
